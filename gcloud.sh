@@ -3,7 +3,7 @@
 source .env
 
 case $1 in
-    deploy-funtion)
+    deploy-function)
         gcloud functions deploy $FUNCTION_NAME \
             --region $REGION \
             --gen2 \
@@ -16,7 +16,8 @@ case $1 in
             --timeout 60s \
             --min-instances 1 \
             --max-instances 5 \
-            --set-env-vars SLACK_WEBHOOK_URL=$SLACK_WEBHOOK_URL
+            --set-env-vars SLACK_WEBHOOK_URL=$SLACK_WEBHOOK_URL \
+            --set-secrets PASSKIT_API_KEY=PASSKIT_API_KEY:latest,PASSKIT_API_SECRET=PASSKIT_API_SECRET:latest
         ;;
     delete-function)
         gcloud functions delete $FUNCTION_NAME \
@@ -25,7 +26,12 @@ case $1 in
     run-local)
         FUNCTION_TARGET=$FUNCTION_NAME \
         SLACK_WEBHOOK_URL=$SLACK_WEBHOOK_URL \
+        PASSKIT_API_KEY=$PASSKIT_API_KEY \
+        PASSKIT_API_SECRET=$PASSKIT_API_SECRET \
         composer start-redeem-ticket \
             --working-dir=./src
-    ;;
+        ;;
+    *)
+        echo "Invalid command : $1"
+        ;;
 esac
