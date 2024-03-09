@@ -76,6 +76,7 @@ class TicketClient
      * チケットのIDを受け取り、リクエストボディを生成する
      * 
      * @see https://docs.passkit.io/protocols/event-tickets/#operation/EventTickets_redeemTicket
+     * @return array{'ticket': array{'ticketId': string}}
      */
     private function getRequestBody4Redeem(string $ticket_id): array
     {
